@@ -30,9 +30,12 @@ public class ClienteControlador {
         Transacao transacao = transacaoDto.paraEntidade();
         transacao.setIdCliente(clienteBD.getId());
 
-        entityManager.persist(transacao);
-
         long novoSaldo = clienteBD.getSaldo() - transacao.getValor();
+
+        if(Math.abs(novoSaldo) - clienteBD.getLimite() > 0 &&
+                transacaoDto.getTipo().equalsIgnoreCase("d")) return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+
+        entityManager.persist(transacao);
 
         Query query = entityManager.createQuery("UPDATE cliente SET saldo=:valor WHERE id=:idCliente");
         query.setParameter("valor", novoSaldo);
