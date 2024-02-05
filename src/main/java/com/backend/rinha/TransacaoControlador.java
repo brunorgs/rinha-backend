@@ -20,7 +20,7 @@ public class TransacaoControlador {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @PostMapping("cliente/{id}/transacoes")
+    @PostMapping("clientes/{id}/transacoes")
     @Transactional
     public ResponseEntity<ClienteDto> criaTransacao(@PathVariable("id") Integer idCliente,
                                                     @RequestBody @Valid TransacaoDto transacaoDto){
