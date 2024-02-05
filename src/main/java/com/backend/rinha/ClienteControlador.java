@@ -7,20 +7,18 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class TransacaoControlador {
+@RequestMapping("clientes")
+public class ClienteControlador {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @PostMapping("clientes/{id}/transacoes")
+    @PostMapping("{id}/transacoes")
     @Transactional
     public ResponseEntity<ClienteDto> criaTransacao(@PathVariable("id") Integer idCliente,
                                                     @RequestBody @Valid TransacaoDto transacaoDto){
