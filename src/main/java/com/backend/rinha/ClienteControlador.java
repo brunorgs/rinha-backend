@@ -32,7 +32,15 @@ public class ClienteControlador {
         Transacao transacao = transacaoDto.paraEntidade();
         transacao.setIdCliente(clienteBD.getId());
 
-        long novoSaldo = clienteBD.getSaldo() - transacao.getValor();
+        Long valor;
+
+        if(transacaoDto.getTipo().equalsIgnoreCase("d")) {
+            valor = transacao.getValor() * -1;
+        } else {
+            valor = transacao.getValor();
+        }
+
+        long novoSaldo = clienteBD.getSaldo() + valor;
 
         if(Math.abs(novoSaldo) - clienteBD.getLimite() > 0 &&
                 transacaoDto.getTipo().equalsIgnoreCase("d")) return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
