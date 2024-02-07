@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 
-@Entity
+@Entity(name = "transacao")
 public class Transacao {
 
     @Id

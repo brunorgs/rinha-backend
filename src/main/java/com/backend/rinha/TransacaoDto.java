@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 public class TransacaoDto implements Serializable {
 
@@ -17,10 +18,22 @@ public class TransacaoDto implements Serializable {
     @Size(max = 10)
     private String descricao;
 
+    private ZonedDateTime realizada_em;
+
     public TransacaoDto(Long valor, String tipo, String descricao) {
         this.valor = valor;
         this.tipo = tipo;
         this.descricao = descricao;
+    }
+
+    public TransacaoDto(Long valor, String tipo, String descricao, ZonedDateTime realizadaEm) {
+        this.valor = valor;
+        this.tipo = tipo;
+        this.descricao = descricao;
+        this.realizada_em = realizadaEm;
+    }
+
+    public TransacaoDto() {
     }
 
     public Transacao paraEntidade() {
@@ -49,5 +62,13 @@ public class TransacaoDto implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public ZonedDateTime getRealizada_em() {
+        return realizada_em;
+    }
+
+    public void setRealizada_em(ZonedDateTime realizada_em) {
+        this.realizada_em = realizada_em;
     }
 }
