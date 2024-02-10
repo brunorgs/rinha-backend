@@ -28,7 +28,7 @@ services:
     volumes:
       - ./1-init.sql:/docker-entrypoint-initdb.d/1-init.sql
       - ./funcao.sql:/docker-entrypoint-initdb.d/funcao.sql
-      - ./postgresql.conf:/usr/share/postgresql/postgresql.conf
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
     deploy:
       resources:
         limits:
