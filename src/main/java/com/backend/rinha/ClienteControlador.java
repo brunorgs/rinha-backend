@@ -3,31 +3,30 @@ package com.backend.rinha;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("clientes")
+@Path("clientes")
 public class ClienteControlador {
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @PostMapping("{id}/transacoes")
-    @Transactional
-    public ResponseEntity<ClienteDto> criaTransacao(@PathVariable("id") Integer idCliente,
-                                                    @RequestBody @Valid TransacaoDto transacaoDto){
+    @POST
+    @Path("{id}/transacoes")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse<ClienteDto> criaTransacao(@PathParam("id") Integer idCliente, @Valid TransacaoDto transacaoDto){
 
         Cliente clienteBD = obtemCliente(idCliente);
 
-        if(clienteBD == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(clienteBD == null) return RestResponse.notFound();
 
         Transacao transacao = transacaoDto.paraEntidade();
         transacao.setIdCliente(clienteBD.getId());
@@ -43,7 +42,7 @@ public class ClienteControlador {
         long novoSaldo = clienteBD.getSaldo() + valor;
 
         if(Math.abs(novoSaldo) - clienteBD.getLimite() > 0 &&
-                transacaoDto.getTipo().equalsIgnoreCase("d")) return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+                transacaoDto.getTipo().equalsIgnoreCase("d")) return RestResponse.status(422);
 
         entityManager.persist(transacao);
 
@@ -53,20 +52,22 @@ public class ClienteControlador {
 
         int executed = query.executeUpdate();
 
-        return new ResponseEntity<>(new ClienteDto(clienteBD.getLimite(), novoSaldo), HttpStatus.OK);
+        return RestResponse.ok(new ClienteDto(clienteBD.getLimite(), novoSaldo));
     }
 
-    @GetMapping("{id}/extrato")
-    public ResponseEntity<ExtratoDto> obtemExtrato(@PathVariable("id") Integer idCliente) {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/extrato")
+    public RestResponse<ExtratoDto> obtemExtrato(@PathParam("id") Integer idCliente) {
 
         Cliente clienteBD = obtemCliente(idCliente);
 
-        if(clienteBD == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(clienteBD == null) return RestResponse.notFound();
 
         SaldoDto saldoDto = new SaldoDto(clienteBD.getSaldo(), clienteBD.getLimite());
 
         ExtratoDto extratoDto = new ExtratoDto(saldoDto, obtemTransacoes(clienteBD.getId()));
-        return new ResponseEntity<>(extratoDto, HttpStatus.OK);
+        return RestResponse.ok(extratoDto);
     }
 
     private List<TransacaoDto> obtemTransacoes(Integer idCliente) {
