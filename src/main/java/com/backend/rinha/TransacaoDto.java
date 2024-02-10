@@ -1,6 +1,8 @@
 package com.backend.rinha;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
@@ -9,12 +11,13 @@ import java.time.ZonedDateTime;
 public class TransacaoDto implements Serializable {
 
     @NotNull
+    @Positive
     private Long valor;
 
-    @NotNull
+    @NotEmpty
     private String tipo;
 
-    @NotNull
+    @NotEmpty
     @Size(max = 10)
     private String descricao;
 

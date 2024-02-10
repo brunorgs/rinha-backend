@@ -1,9 +1,9 @@
 package com.backend.rinha;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.ZonedDateTime;
 
@@ -20,9 +20,10 @@ public class Transacao {
 
     private String descricao;
 
+    @Column(name = "realizada_em")
     private ZonedDateTime realizadaEm;
 
-    @NotNull
+    @Column(name = "id_cliente")
     private Integer idCliente;
 
     public Transacao() {
