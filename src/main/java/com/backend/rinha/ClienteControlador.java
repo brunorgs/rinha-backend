@@ -10,6 +10,7 @@ import org.jboss.resteasy.reactive.RestResponse;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Path("clientes")
@@ -18,41 +19,30 @@ public class ClienteControlador {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private static final List<String> tipos = Arrays.asList("c", "d");
+
     @POST
     @Path("{id}/transacoes")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse<ClienteDto> criaTransacao(@PathParam("id") Integer idCliente, @Valid TransacaoDto transacaoDto){
 
-        Cliente clienteBD = obtemCliente(idCliente);
+        if(!tipos.contains(transacaoDto.getTipo())) return RestResponse.status(422);
 
-        if(clienteBD == null) return RestResponse.notFound();
+        Query nativeQuery = entityManager.createNativeQuery("select * from cria_transacao(:id, :valor, :tipo, :descricao)");
+        nativeQuery.setParameter("id", idCliente);
+        nativeQuery.setParameter("valor", transacaoDto.getValor());
+        nativeQuery.setParameter("tipo", transacaoDto.getTipo());
+        nativeQuery.setParameter("descricao", transacaoDto.getDescricao());
 
-        Transacao transacao = transacaoDto.paraEntidade();
-        transacao.setIdCliente(clienteBD.getId());
+        List<Object[]> singleResult = nativeQuery.getResultList();
 
-        Long valor;
+        ClienteDto clienteDto = new ClienteDto((Long) singleResult.getFirst()[0], (Long) singleResult.getFirst()[1]);
 
-        if(transacaoDto.getTipo().equalsIgnoreCase("d")) {
-            valor = transacao.getValor() * -1;
-        } else {
-            valor = transacao.getValor();
-        }
+        if(clienteDto.limite() == -1) return RestResponse.notFound();
+        if(clienteDto.limite() == -2) return RestResponse.status(422);
 
-        long novoSaldo = clienteBD.getSaldo() + valor;
-
-        if(Math.abs(novoSaldo) - clienteBD.getLimite() > 0 &&
-                transacaoDto.getTipo().equalsIgnoreCase("d")) return RestResponse.status(422);
-
-        entityManager.persist(transacao);
-
-        Query query = entityManager.createQuery("UPDATE cliente SET saldo=:valor WHERE id=:idCliente");
-        query.setParameter("valor", novoSaldo);
-        query.setParameter("idCliente", clienteBD.getId());
-
-        int executed = query.executeUpdate();
-
-        return RestResponse.ok(new ClienteDto(clienteBD.getLimite(), novoSaldo));
+        return RestResponse.ok(clienteDto);
     }
 
     @GET
@@ -60,7 +50,9 @@ public class ClienteControlador {
     @Path("{id}/extrato")
     public RestResponse<ExtratoDto> obtemExtrato(@PathParam("id") Integer idCliente) {
 
-        Cliente clienteBD = obtemCliente(idCliente);
+        if(idCliente == null) return RestResponse.notFound();
+
+        Cliente clienteBD = entityManager.find(Cliente.class, idCliente);
 
         if(clienteBD == null) return RestResponse.notFound();
 
@@ -86,20 +78,5 @@ public class ClienteControlador {
         }
 
         return list;
-    }
-
-
-    private Cliente obtemCliente(Integer id) {
-
-        if(id == null) return null;
-
-        Query query = entityManager.createQuery("select (id, limite, saldo) from cliente where id=:value");
-        query.setParameter("value", id);
-
-        List<Object[]> resultList = query.getResultList();
-
-        if(resultList.isEmpty()) return null;
-
-        return new Cliente((Integer)resultList.getFirst()[0], (Long) resultList.getFirst()[1], (Long) resultList.getFirst()[2]);
     }
 }
