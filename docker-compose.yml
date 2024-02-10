@@ -10,9 +10,11 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./script.sql:/docker-entrypoint-initdb.d/script.sql
-    deploy:
-      resources:
-        limits:
-          cpus: "0.13"
-          memory: "140MB"
+      - ./1-init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ./funcao.sql:/docker-entrypoint-initdb.d/funcao.sql
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "0.13"
+#          memory: "140MB"
