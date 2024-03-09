@@ -3,11 +3,11 @@ package com.backend.rinha;
 import java.time.ZonedDateTime;
 
 public class SaldoDto {
-    private Long total;
+    private Integer total;
     private ZonedDateTime data_extrato = ZonedDateTime.now();
-    private Long limite;
+    private Integer limite;
 
-    public SaldoDto(Long total, Long limite) {
+    public SaldoDto(Integer total, Integer limite) {
         this.total = total;
         this.limite = limite;
     }
@@ -15,11 +15,11 @@ public class SaldoDto {
     public SaldoDto() {
     }
 
-    public Long getTotal() {
+    public Integer getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
@@ -31,11 +31,11 @@ public class SaldoDto {
         this.data_extrato = data_extrato;
     }
 
-    public Long getLimite() {
+    public Integer getLimite() {
         return limite;
     }
 
-    public void setLimite(Long limite) {
+    public void setLimite(Integer limite) {
         this.limite = limite;
     }
 }

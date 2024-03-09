@@ -37,7 +37,7 @@ public class ClienteControlador {
 
         List<Object[]> singleResult = nativeQuery.getResultList();
 
-        ClienteDto clienteDto = new ClienteDto((Long) singleResult.getFirst()[0], (Long) singleResult.getFirst()[1]);
+        ClienteDto clienteDto = new ClienteDto((Integer) singleResult.getFirst()[0], (Integer) singleResult.getFirst()[1]);
 
         if(clienteDto.limite() == -1) return RestResponse.notFound();
         if(clienteDto.limite() == -2) return RestResponse.status(422);
@@ -73,7 +73,7 @@ public class ClienteControlador {
         List<Object[]> resultList = query.getResultList();
 
         for(Object transacao[] : resultList) {
-            list.add(new TransacaoDto((Long) transacao[0], (String) transacao[1],
+            list.add(new TransacaoDto((Integer) transacao[0], (String) transacao[1],
                     (String) transacao[2], (ZonedDateTime) transacao[3]));
         }
 

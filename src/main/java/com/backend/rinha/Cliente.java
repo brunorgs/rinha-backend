@@ -9,13 +9,13 @@ public class Cliente {
     @Id
     private Integer id;
 
-    private Long limite;
+    private Integer limite;
 
-    private Long saldo;
+    private Integer saldo;
 
     public Cliente() {}
 
-    public Cliente(Integer id, Long limite, Long saldo) {
+    public Cliente(Integer id, Integer limite, Integer saldo) {
         this.id = id;
         this.limite = limite;
         this.saldo = saldo;
@@ -29,19 +29,19 @@ public class Cliente {
         this.id = id;
     }
 
-    public Long getLimite() {
+    public Integer getLimite() {
         return limite;
     }
 
-    public void setLimite(Long limite) {
+    public void setLimite(Integer limite) {
         this.limite = limite;
     }
 
-    public Long getSaldo() {
+    public Integer getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(Long saldo) {
+    public void setSaldo(Integer saldo) {
         this.saldo = saldo;
     }
 }

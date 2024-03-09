@@ -1,3 +1,3 @@
 package com.backend.rinha;
 
-public record ClienteDto(Long limite, Long saldo) { }
+public record ClienteDto(Integer limite, Integer saldo) { }

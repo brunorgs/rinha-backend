@@ -1,19 +1,23 @@
 -- Coloque scripts iniciais aqui
 
-CREATE UNLOGGED TABLE cliente (
+--CREATE EXTENSION pg_stat_statements;
+
+--alter system set shared_preload_libraries='pg_stat_statements';
+
+CREATE TABLE cliente (
 	id int4 NOT NULL,
-	limite int8 NULL,
-	saldo int8 DEFAULT 0,
+	limite int4 NULL,
+	saldo int4 DEFAULT 0,
 	CONSTRAINT cliente_pkey PRIMARY KEY (id)
 );
 
-CREATE UNLOGGED TABLE transacao (
+CREATE TABLE transacao (
 	id SERIAL NOT NULL,
 	descricao varchar(255) NULL,
 	id_cliente int4 NOT NULL,
 	realizada_em timestamptz(6) NULL,
 	tipo varchar(255) NULL,
-	valor int8 NULL,
+	valor int4 NULL,
 	CONSTRAINT transacao_pkey PRIMARY KEY (id)
 );
 

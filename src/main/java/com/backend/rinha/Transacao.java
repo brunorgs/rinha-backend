@@ -14,7 +14,7 @@ public class Transacao {
     @GeneratedValue
     private Integer id;
 
-    private Long valor;
+    private @jakarta.validation.constraints.NotNull @jakarta.validation.constraints.Positive Integer valor;
 
     private String tipo;
 
@@ -29,7 +29,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao(Long valor, String tipo, String descricao) {
+    public Transacao(@jakarta.validation.constraints.NotNull @jakarta.validation.constraints.Positive Integer valor, String tipo, String descricao) {
         this.valor = valor;
         this.tipo = tipo;
         this.descricao = descricao;
@@ -44,11 +44,11 @@ public class Transacao {
         this.id = id;
     }
 
-    public Long getValor() {
+    public @jakarta.validation.constraints.NotNull @jakarta.validation.constraints.Positive Integer getValor() {
         return valor;
     }
 
-    public void setValor(Long valor) {
+    public void setValor(@jakarta.validation.constraints.NotNull @jakarta.validation.constraints.Positive Integer valor) {
         this.valor = valor;
     }
 

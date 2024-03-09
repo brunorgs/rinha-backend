@@ -12,7 +12,7 @@ public class TransacaoDto implements Serializable {
 
     @NotNull
     @Positive
-    private Long valor;
+    private Integer valor;
 
     @NotEmpty
     private String tipo;
@@ -23,13 +23,13 @@ public class TransacaoDto implements Serializable {
 
     private ZonedDateTime realizada_em;
 
-    public TransacaoDto(Long valor, String tipo, String descricao) {
+    public TransacaoDto(Integer valor, String tipo, String descricao) {
         this.valor = valor;
         this.tipo = tipo;
         this.descricao = descricao;
     }
 
-    public TransacaoDto(Long valor, String tipo, String descricao, ZonedDateTime realizadaEm) {
+    public TransacaoDto(Integer valor, String tipo, String descricao, ZonedDateTime realizadaEm) {
         this.valor = valor;
         this.tipo = tipo;
         this.descricao = descricao;
@@ -43,11 +43,11 @@ public class TransacaoDto implements Serializable {
         return new Transacao(valor, tipo, descricao);
     }
 
-    public Long getValor() {
+    public Integer getValor() {
         return valor;
     }
 
-    public void setValor(Long valor) {
+    public void setValor(Integer valor) {
         this.valor = valor;
     }
 
